@@ -1,0 +1,15 @@
+{
+	"chat.customizations.migrationHint": "always",
+	"chat.customizations.promptMigration.enabled": true,
+	"chat.customizations.userDataMigration.enabled": true,
+	"chat.customizations.locationsMigration.enabled": true,
+	"chat.agentFilesLocations": {
+		".custom/agents": true
+	},
+	"chat.instructionsFilesLocations": {
+		".custom/instructions": true
+	},
+	"chat.agentSkillsLocations": {
+		".custom/skills": true
+	}
+}
