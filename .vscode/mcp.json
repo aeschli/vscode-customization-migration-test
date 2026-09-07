@@ -1,0 +1,25 @@
+{
+	// Manual migration cases; see README.md for expected successes and failures.
+	"servers": {
+		"stdio-basic": { "type": "stdio", "command": "node", "args": ["mcp/mock-server.mjs", "stdio-basic"], "env": { "MIGRATION_FIXTURE": "local-test-only" } },
+		"http-basic": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "headers": { "X-Fixture": "migration-test" } },
+		"leave-unselected": { "command": "node", "args": ["mcp/mock-server.mjs", "leave-unselected"] },
+		"equivalent": { "command": "node", "args": ["mcp/mock-server.mjs", "equivalent"], "env": {} },
+		// The target intentionally has a different definition for this name.
+		"same-name": { "command": "node", "args": ["mcp/mock-server.mjs", "source-version"] },
+		"spaces-and-unicode Ω": { "command": "node", "args": ["mcp/mock-server.mjs", "label with spaces Ω"] },
+		// One long label is enough to check truncation without repetitive filler servers.
+		"long-server-name-for-checking-label-truncation-and-focus": { "command": "node", "args": ["mcp/mock-server.mjs", "long-label"] },
+		// Negative cases: inventory can show them, but migration must leave them here.
+		"uses-env-file": { "command": "node", "args": ["mcp/mock-server.mjs", "env-file"], "envFile": ".env" },
+		"uses-explicit-cwd": { "command": "node", "args": ["mcp/mock-server.mjs", "cwd"], "cwd": "." },
+		"uses-sandbox": { "command": "node", "args": ["mcp/mock-server.mjs", "sandbox"], "sandboxEnabled": true },
+		"uses-dev-mode": { "command": "node", "args": ["mcp/mock-server.mjs", "dev"], "dev": { "watch": "mcp/*.mjs" } },
+		"uses-version-metadata": { "command": "node", "args": ["mcp/mock-server.mjs", "metadata"], "version": "1.0.0" },
+		"uses-workspace-variable": { "command": "node", "args": ["${workspaceFolder}/mcp/mock-server.mjs", "resolved-path"] },
+		"requires-input": { "command": "node", "args": ["mcp/mock-server.mjs", "${input:fixtureLabel}"] },
+		"uses-oauth-config": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "oauth": { "clientId": "fixture-client-not-a-secret" } },
+		"uses-sse-transport": { "type": "http", "transport": "sse", "url": "http://127.0.0.1:48123/mcp" }
+	},
+	"inputs": [{ "id": "fixtureLabel", "type": "promptString", "description": "Fixture label (never enter a secret)", "default": "manual-test" }]
+}

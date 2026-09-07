@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "MCP: Start Local HTTP Fixture",
+			"type": "process",
+			"command": "node",
+			"args": ["${workspaceFolder}/mcp/mock-server.mjs", "--http", "48123"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"problemMatcher": []
+		}
+	]
+}

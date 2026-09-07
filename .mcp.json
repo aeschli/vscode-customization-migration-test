@@ -1,0 +1,8 @@
+{
+	"mcpServers": {
+		"equivalent": { "type": "stdio", "command": "node", "args": ["mcp/mock-server.mjs", "equivalent"] },
+		"same-name": { "command": "node", "args": ["mcp/mock-server.mjs", "destination-version"] },
+		"already-migrated": { "type": "stdio", "command": "node", "args": ["mcp/mock-server.mjs", "already-migrated"] },
+		"existing": { "command": "node", "args": ["mcp/mock-server.mjs", "existing"] }
+	}
+}
