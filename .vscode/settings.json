@@ -4,6 +4,9 @@
 	"chat.agentFilesLocations": {
 		".custom/agents": true
 	},
+	"chat.agentSkillsLocations": {
+		".custom/skills": true
+	},
 	"chat.instructionsFilesLocations": {
 		".custom/instructions": true
 	},
