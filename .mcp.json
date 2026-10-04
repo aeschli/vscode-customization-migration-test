@@ -3,6 +3,16 @@
 		"equivalent": { "type": "stdio", "command": "node", "args": ["mcp/mock-server.mjs", "equivalent"] },
 		"same-name": { "command": "node", "args": ["mcp/mock-server.mjs", "destination-version"] },
 		"already-migrated": { "type": "stdio", "command": "node", "args": ["mcp/mock-server.mjs", "already-migrated"] },
-		"existing": { "command": "node", "args": ["mcp/mock-server.mjs", "existing"] }
+		"existing": { "command": "node", "args": ["mcp/mock-server.mjs", "existing"] },
+		"workiq": { "type": "stdio", "command": "node", "args": ["node_modules/@microsoft/workiq/bin/workiq.js", "mcp"], "tools": ["*"] },
+		"stdio-basic": { "type": "stdio", "command": "node", "args": ["mcp/mock-server.mjs", "stdio-basic"], "env": { "MIGRATION_FIXTURE": "local-test-only" }, "tools": ["*"] },
+		"http-basic": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "headers": { "X-Fixture": "migration-test" }, "tools": ["*"] },
+		"leave-unselected": { "command": "node", "args": ["mcp/mock-server.mjs", "leave-unselected"], "tools": ["*"] },
+		"spaces-and-unicode Ω": { "command": "node", "args": ["mcp/mock-server.mjs", "label with spaces Ω"], "tools": ["*"] },
+		"long-server-name-for-checking-label-truncation-and-focus": { "command": "node", "args": ["mcp/mock-server.mjs", "long-label"], "tools": ["*"] },
+		"uses-sandbox": { "command": "node", "args": ["mcp/mock-server.mjs", "sandbox"], "tools": ["*"] },
+		"uses-dev-mode": { "command": "node", "args": ["mcp/mock-server.mjs", "dev"], "tools": ["*"] },
+		"uses-version-metadata": { "command": "node", "args": ["mcp/mock-server.mjs", "metadata"], "tools": ["*"] },
+		"uses-workspace-variable": { "command": "node", "args": ["/Users/martinae/workspaces/vscode-customization-migration-test/mcp/mock-server.mjs", "resolved-path"], "tools": ["*"] }
 	}
 }
