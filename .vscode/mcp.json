@@ -1,6 +1,7 @@
 {
-	// Manual migration cases; see README.md for expected successes and failures.
+	// Manual migration cases and WorkIQ; see README.md for expected successes and failures.
 	"servers": {
+		"workiq": { "type": "stdio", "command": "node", "args": ["node_modules/@microsoft/workiq/bin/workiq.js", "mcp"] },
 		"stdio-basic": { "type": "stdio", "command": "node", "args": ["mcp/mock-server.mjs", "stdio-basic"], "env": { "MIGRATION_FIXTURE": "local-test-only" } },
 		"http-basic": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "headers": { "X-Fixture": "migration-test" } },
 		"leave-unselected": { "command": "node", "args": ["mcp/mock-server.mjs", "leave-unselected"] },
