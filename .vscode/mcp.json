@@ -17,6 +17,12 @@
 		"uses-sandbox": { "command": "node", "args": ["mcp/mock-server.mjs", "sandbox"], "sandboxEnabled": true },
 		"uses-dev-mode": { "command": "node", "args": ["mcp/mock-server.mjs", "dev"], "dev": { "watch": "mcp/*.mjs" } },
 		"uses-version-metadata": { "command": "node", "args": ["mcp/mock-server.mjs", "metadata"], "version": "1.0.0" },
+		// Registry auto-updates: only an enabled gallery should warn and be partially supported.
+		"uses-gallery": { "command": "node", "args": ["mcp/mock-server.mjs", "gallery"], "gallery": true },
+		"uses-gallery-disabled": { "command": "node", "args": ["mcp/mock-server.mjs", "gallery-disabled"], "gallery": false },
+		"uses-gallery-with-version": { "command": "node", "args": ["mcp/mock-server.mjs", "gallery-version"], "gallery": true, "version": "1.0.0" },
+		"uses-gallery-disabled-with-version": { "command": "node", "args": ["mcp/mock-server.mjs", "gallery-disabled-version"], "gallery": false, "version": "1.0.0" },
+
 		"uses-workspace-variable": { "command": "node", "args": ["${workspaceFolder}/mcp/mock-server.mjs", "resolved-path"] },
 		"requires-input": { "command": "node", "args": ["mcp/mock-server.mjs", "${input:fixtureLabel}"] },
 		"uses-oauth-config": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "oauth": { "clientId": "fixture-client-not-a-secret" } },
