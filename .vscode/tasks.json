@@ -8,6 +8,14 @@
 			"args": ["${workspaceFolder}/mcp/mock-server.mjs", "--http", "48123"],
 			"options": { "cwd": "${workspaceFolder}" },
 			"problemMatcher": []
+		},
+		{
+			"label": "MCP: Start Local OAuth Fixture",
+			"type": "process",
+			"command": "node",
+			"args": ["${workspaceFolder}/mcp/oauth-server.mjs", "48124"],
+			"options": { "cwd": "${workspaceFolder}" },
+			"problemMatcher": []
 		}
 	]
 }

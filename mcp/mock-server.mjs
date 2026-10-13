@@ -7,7 +7,7 @@ import { createServer } from 'node:http';
 import { createInterface } from 'node:readline';
 import { pathToFileURL } from 'node:url';
 
-export function respond(request, label = 'fixture', cwd = process.cwd()) {
+export function respond(request, label = 'fixture', cwd = process.cwd(), details = {}) {
 	if (request?.id === undefined) {
 		return undefined;
 	}
@@ -24,22 +24,22 @@ export function respond(request, label = 'fixture', cwd = process.cwd()) {
 		case 'tools/list':
 			return { ...response, result: { tools: [{
 				name: 'migration_probe',
-				description: 'Return the fixture label and working directory without reading or writing files.',
+				description: 'Return the fixture label, working directory, extra arguments and FIXTURE_* environment without reading or writing files.',
 				inputSchema: { type: 'object', properties: {}, additionalProperties: false },
 				annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
 			}] } };
 		case 'tools/call':
 			return request.params?.name === 'migration_probe'
-				? { ...response, result: { content: [{ type: 'text', text: JSON.stringify({ label, cwd }) }] } }
+				? { ...response, result: { content: [{ type: 'text', text: JSON.stringify({ label, cwd, ...details }) }] } }
 				: { ...response, error: { code: -32602, message: 'Unknown fixture tool' } };
 		default:
 			return { ...response, error: { code: -32601, message: 'Method not found' } };
 	}
 }
 
-function parseResponse(text, label) {
+function parseResponse(text, label, details) {
 	try {
-		return respond(JSON.parse(text), label);
+		return respond(JSON.parse(text), label, undefined, details);
 	} catch {
 		return { jsonrpc: '2.0', id: null, error: { code: -32700, message: 'Invalid JSON' } };
 	}
@@ -88,12 +88,17 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
 		server.listen(port, '127.0.0.1', () => console.error(`Fixture MCP endpoint: http://127.0.0.1:${port}/mcp`));
 	} else {
 		const label = process.argv[2] ?? 'stdio-fixture';
+		// Shows the values a server received, such as migrated settings. Only non-secret fixture values are reported.
+		const details = {
+			args: process.argv.slice(3),
+			env: Object.fromEntries(Object.entries(process.env).filter(([name]) => name.startsWith('FIXTURE_'))),
+		};
 		const input = createInterface({ input: process.stdin, crlfDelay: Infinity });
 		input.on('line', line => {
 			if (!line.trim()) {
 				return;
 			}
-			const response = parseResponse(line, label);
+			const response = parseResponse(line, label, details);
 			if (response !== undefined) {
 				process.stdout.write(`${JSON.stringify(response)}\n`);
 			}

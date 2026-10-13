@@ -10,6 +10,13 @@
 	"chat.instructionsFilesLocations": {
 		".custom/instructions": true
 	},
+	// Read by the `config-*` MCP servers in mcp.json. `fixture.missing` and `fixture.userOnly` are deliberately not set here.
+	"fixture.label": "from-workspace-settings",
+	"fixture.port": 48123,
+	"fixture.region": "westus",
+	"fixture.mode": "fast",
+	"fixture.host": "127.0.0.1:48123",
+	"fixture.options": { "verbose": true },
 	
 
 }

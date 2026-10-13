@@ -24,9 +24,47 @@
 		"uses-gallery-disabled-with-version": { "command": "node", "args": ["mcp/mock-server.mjs", "gallery-disabled-version"], "gallery": false, "version": "1.0.0" },
 
 		"uses-workspace-variable": { "command": "node", "args": ["${workspaceFolder}/mcp/mock-server.mjs", "resolved-path"] },
+		// Inputs migrate to environment variables. The Copilot harness can't prompt for them.
 		"requires-input": { "command": "node", "args": ["mcp/mock-server.mjs", "${input:fixtureLabel}"] },
+		"input-no-default": { "command": "node", "args": ["mcp/mock-server.mjs", "input-no-default"], "env": { "FIXTURE_LOG_LEVEL": "${input:log-level}" } },
+		"input-pick": { "command": "node", "args": ["mcp/mock-server.mjs", "input-pick", "--mode=${input:mode}"] },
+		"input-reserved-name": { "command": "node", "args": ["mcp/mock-server.mjs", "input-reserved-name", "--tools=${input:path}"] },
+		"input-http-header": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "headers": { "X-Fixture-Tenant": "${input:tenant}" } },
+		// Inputs that can't be migrated: they stay here.
+		"input-password": { "command": "node", "args": ["mcp/mock-server.mjs", "input-password", "--token=${input:token}"] },
+		"input-command": { "command": "node", "args": ["mcp/mock-server.mjs", "${input:picked}"] },
+		"input-in-url": { "type": "http", "url": "http://127.0.0.1:48123/${input:tenant}/mcp" },
+		// Settings migrate to environment variables set to their current values; see "Servers that use settings" in README.md.
+		"config-string": { "command": "node", "args": ["mcp/mock-server.mjs", "config-string", "--label=${config:fixture.label}", "--again=${config:fixture.label}"] },
+		"config-number-env": { "command": "node", "args": ["mcp/mock-server.mjs", "config-number-env"], "env": { "FIXTURE_PORT": "${config:fixture.port}" } },
+		"config-http-header": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "headers": { "X-Fixture-Region": "${config:fixture.region}" } },
+		"config-http-url": { "type": "http", "url": "http://127.0.0.1:48123/mcp?region=${config:fixture.region}" },
+		"config-with-input": { "command": "node", "args": ["mcp/mock-server.mjs", "config-with-input", "--mode=${input:mode}", "--label=${config:fixture.label}"] },
+		// Settings without a value that can be written become empty environment variables.
+		"config-unset": { "command": "node", "args": ["mcp/mock-server.mjs", "config-unset", "--missing=${config:fixture.missing}"] },
+		"config-structured": { "command": "node", "args": ["mcp/mock-server.mjs", "config-structured", "--options=${config:fixture.options}"] },
+		"config-user-only": { "command": "node", "args": ["mcp/mock-server.mjs", "config-user-only", "--user=${config:fixture.userOnly}"] },
+		// Settings that can't be migrated: they stay here.
+		"config-in-env-name": { "command": "node", "args": ["mcp/mock-server.mjs", "config-in-env-name"], "env": { "${config:fixture.label}": "value" } },
+		"config-collision": { "command": "node", "args": ["mcp/mock-server.mjs", "config-collision", "--mode=${config:fixture.mode}", "--env-mode=${env:FIXTURE_MODE}"] },
+		"config-in-url-host": { "type": "http", "url": "http://${config:fixture.host}/mcp" },
+		// OAuth: the client ID migrates as `oauthClientId`. See "Servers that use OAuth" in README.md.
 		"uses-oauth-config": { "type": "http", "url": "http://127.0.0.1:48123/mcp", "oauth": { "clientId": "fixture-client-not-a-secret" } },
+		"oauth-public-client": { "type": "http", "url": "http://127.0.0.1:48124/mcp", "oauth": { "clientId": "fixture-public-client" } },
+		"oauth-not-enterprise-managed": { "type": "http", "url": "http://127.0.0.1:48124/mcp", "oauth": { "clientId": "fixture-public-client", "enterpriseManaged": false } },
+		// Migrates until a client secret is stored with the Set Client Secret code lens, then stays here.
+		"oauth-client-secret": { "type": "http", "url": "http://127.0.0.1:48124/mcp", "oauth": { "clientId": "fixture-confidential-client" } },
+		// Enterprise-managed sign-in can't be migrated: it stays here.
+		"oauth-enterprise-managed": { "type": "http", "url": "http://127.0.0.1:48124/mcp", "oauth": { "clientId": "fixture-public-client", "enterpriseManaged": true } },
 		"uses-sse-transport": { "type": "http", "transport": "sse", "url": "http://127.0.0.1:48123/mcp" }
 	},
-	"inputs": [{ "id": "fixtureLabel", "type": "promptString", "description": "Fixture label (never enter a secret)", "default": "manual-test" }]
+	"inputs": [
+		{ "id": "fixtureLabel", "type": "promptString", "description": "Fixture label (never enter a secret)", "default": "manual-test" },
+		{ "id": "log-level", "type": "promptString", "description": "Log level (no default)" },
+		{ "id": "mode", "type": "pickString", "description": "Mode", "options": [{ "label": "Fast", "value": "fast" }, { "label": "Safe", "value": "safe" }], "default": "safe" },
+		{ "id": "path", "type": "promptString", "description": "Tools directory (PATH is reserved, so this becomes MCP_PATH)", "default": "/usr/local/bin" },
+		{ "id": "tenant", "type": "promptString", "description": "Tenant", "default": "contoso" },
+		{ "id": "token", "type": "promptString", "description": "Token (password input, never enter a secret)", "password": true },
+		{ "id": "picked", "type": "command", "command": "workbench.action.files.openFile" }
+	]
 }
